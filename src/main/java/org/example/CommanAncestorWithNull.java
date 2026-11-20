@@ -2,7 +2,7 @@ package org.example;
 
 public class CommanAncestorWithNull {
     // considering both p and q present in a tree
-    private static TreeNode commanAncestor(TreeNode root , int p , int q){
+    private static TreeNode findLCA(TreeNode root , int p , int q){
         if(root == null) {
             return null;
         }
@@ -11,14 +11,33 @@ public class CommanAncestorWithNull {
             return root;
         }
 
-        TreeNode lstCommanAncestor = commanAncestor(root.left , p , q);
-        TreeNode rstCommanAncestor = commanAncestor(root.right , p , q);
+        TreeNode lstCommanAncestor = findLCA(root.left , p , q);
+        TreeNode rstCommanAncestor = findLCA(root.right , p , q);
         if(lstCommanAncestor == null) return rstCommanAncestor;
         else if(rstCommanAncestor == null) return lstCommanAncestor;
         else return root;
     }
 
+    private static boolean exists(TreeNode root , int target){
+        if(root == null) return false;
+
+        if(root.val == target) return true;
+
+        return exists(root.left , target) || exists(root.right , target);
+
+    }
+
+    private static TreeNode commanLCA(TreeNode root, int p , int q) {
+        if(!exists(root, p) || !exists(root, q)) {
+            return null;
+        }
+
+        return findLCA(root,p,q);
+    }
+
     public static void main(String[] args) {
+
+        // TODO : need to write element exist logic
         TreeNode root = new TreeNode(5);
         root.left = new TreeNode(8);
         root.left.left = new TreeNode(12);
@@ -30,8 +49,11 @@ public class CommanAncestorWithNull {
         // case 2 : p = 8 , q = 14 CA = 8
         // case 3 : p = 10 , q = 11 CA = null
         // case 4 : p = 100 , q = 101 CA = null
-        TreeNode commanAncestorNode = commanAncestor(root , 11, 14);
-        System.out.println("Comman Ancestor for p and q is : " + commanAncestorNode.val);
+        TreeNode commanAncestorNode = commanLCA(root , 10, 11);
+        if(commanAncestorNode == null) {
+            System.out.println("null");
+        }else
+            System.out.println(commanAncestorNode);
 
 
 
